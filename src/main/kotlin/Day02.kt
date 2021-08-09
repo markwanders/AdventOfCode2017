@@ -5,8 +5,25 @@ fun main() {
         .map { line -> line.map { s -> s.toInt() } }
         .sumOf { numbers -> numbers.maxOrNull()!! - numbers.minOrNull()!! }
     )
+    println(input
+        .split("\n")
+        .map { line -> line.split("\t") }
+        .map { line -> line.map { s -> s.toInt() } }
+        .map { numbers -> numbers
+            .filter { number -> divisible(number, numbers) }
+            .sortedDescending() }
+        .sumOf { numbers -> numbers.first() / numbers.last() }
+    )
 }
 
+fun divisible(number: Int, numbers: List<Int>) : Boolean {
+    for (otherNumber in numbers) {
+        if (number != otherNumber && (otherNumber % number == 0|| number % otherNumber == 0)) {
+            return true
+        }
+    }
+    return false
+}
 private const val input = "737\t1866\t1565\t1452\t1908\t1874\t232\t1928\t201\t241\t922\t281\t1651\t1740\t1012\t1001\n" +
         "339\t581\t41\t127\t331\t133\t51\t131\t129\t95\t499\t527\t518\t435\t508\t494\n" +
         "1014\t575\t1166\t259\t152\t631\t1152\t1010\t182\t943\t163\t158\t1037\t1108\t1092\t887\n" +
@@ -23,3 +40,7 @@ private const val input = "737\t1866\t1565\t1452\t1908\t1874\t232\t1928\t201\t24
         "175\t5396\t1852\t4565\t4775\t665\t4227\t171\t4887\t181\t2098\t4408\t2211\t3884\t2482\t158\n" +
         "1717\t3629\t244\t258\t281\t3635\t235\t4148\t3723\t4272\t3589\t4557\t4334\t4145\t3117\t4510\n" +
         "55\t258\t363\t116\t319\t49\t212\t44\t303\t349\t327\t330\t316\t297\t313\t67"
+
+private const val test = "5\t9\t2\t8\n" +
+        "9\t4\t7\t3\n" +
+        "3\t8\t6\t5"
