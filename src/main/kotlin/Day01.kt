@@ -3,9 +3,7 @@ fun main() {
     var sum = 0
     for (i in input.indices) {
         val first = input[i]
-        if (i == input.length - 1)
-            continue
-        val second = if (i == 0) input.last() else input[i + 1]
+        val second = input[(i + 1) % input.length]
         if (first == second)
             sum += input[i].digitToInt()
     }
@@ -14,8 +12,6 @@ fun main() {
     sum = 0
     for (i in input.indices) {
         val first = input[i]
-        if (i == input.length - 1)
-            continue
         val second = input[(i + input.length / 2) % input.length]
         if (first == second)
             sum += input[i].digitToInt()
