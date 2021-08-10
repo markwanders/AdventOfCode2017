@@ -10,20 +10,12 @@ fun main() {
         .map { line -> line.split("\t") }
         .map { line -> line.map { s -> s.toInt() } }
         .map { numbers -> numbers
-            .filter { number -> divisible(number, numbers) }
+            .filter { number -> numbers.any { otherNumber -> number != otherNumber && (otherNumber % number == 0|| number % otherNumber == 0) } }
             .sortedDescending() }
         .sumOf { numbers -> numbers.first() / numbers.last() }
     )
 }
 
-fun divisible(number: Int, numbers: List<Int>) : Boolean {
-    for (otherNumber in numbers) {
-        if (number != otherNumber && (otherNumber % number == 0|| number % otherNumber == 0)) {
-            return true
-        }
-    }
-    return false
-}
 private const val input = "737\t1866\t1565\t1452\t1908\t1874\t232\t1928\t201\t241\t922\t281\t1651\t1740\t1012\t1001\n" +
         "339\t581\t41\t127\t331\t133\t51\t131\t129\t95\t499\t527\t518\t435\t508\t494\n" +
         "1014\t575\t1166\t259\t152\t631\t1152\t1010\t182\t943\t163\t158\t1037\t1108\t1092\t887\n" +
