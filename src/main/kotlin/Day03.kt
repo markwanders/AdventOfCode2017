@@ -6,6 +6,9 @@ fun main() {
     var deltaX = 0
     var deltaY = 0
     val memory = hashMapOf<Pair<Int, Int>, Int>()
+    val memoryPartTwo = hashMapOf<Pair<Int, Int>, Int>()
+    var memoryPartTwoMax = 1
+    memoryPartTwo[Pair(0,0)] = 1
     for (i in 1..data) {
         if (memory.isNotEmpty()) {
             if (deltaX == 0 && deltaY == 0) {
@@ -26,8 +29,22 @@ fun main() {
         }
         point = Pair(point.first + deltaX, point.second + deltaY)
         memory[point] = i
+        if (memoryPartTwoMax < data && !memoryPartTwo.containsKey(point)) {
+            memoryPartTwo[point] = memoryPartTwo.getOrElse(Pair(point.first + 1, point.second)) { 0 } +
+                    memoryPartTwo.getOrElse(Pair(point.first, point.second + 1)) { 0 } +
+                    memoryPartTwo.getOrElse(Pair(point.first + 1, point.second + 1)) { 0 } +
+                    memoryPartTwo.getOrElse(Pair(point.first - 1, point.second)) { 0 } +
+                    memoryPartTwo.getOrElse(Pair(point.first, point.second - 1)) { 0 } +
+                    memoryPartTwo.getOrElse(Pair(point.first - 1, point.second - 1)) { 0 } +
+                    memoryPartTwo.getOrElse(Pair(point.first - 1, point.second + 1)) { 0 } +
+                    memoryPartTwo.getOrElse(Pair(point.first + 1, point.second - 1)) { 0 }
+            if (memoryPartTwo[point]!! > memoryPartTwoMax) {
+                memoryPartTwoMax = memoryPartTwo[point]!!
+            }
+        }
     }
     println(manhattan(point))
+    println(memoryPartTwo.maxByOrNull { it.value }!!.value)
 }
 
 fun manhattan(coordinates: Pair<Int, Int>) : Int {
