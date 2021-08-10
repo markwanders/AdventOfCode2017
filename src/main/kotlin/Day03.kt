@@ -8,6 +8,7 @@ fun main() {
     val memory = hashMapOf<Pair<Int, Int>, Int>()
     val memoryPartTwo = hashMapOf<Pair<Int, Int>, Int>()
     var memoryPartTwoMax = 1
+    val offsets = listOf(Pair(0,1), Pair(1,1), Pair(1,0), Pair(1,-1), Pair(-1,1), Pair(-1, -1), Pair(0,-1), Pair(-1, 0))
     memoryPartTwo[Pair(0,0)] = 1
     for (i in 1..data) {
         if (memory.isNotEmpty()) {
@@ -30,14 +31,9 @@ fun main() {
         point = Pair(point.first + deltaX, point.second + deltaY)
         memory[point] = i
         if (memoryPartTwoMax < data && !memoryPartTwo.containsKey(point)) {
-            memoryPartTwo[point] = memoryPartTwo.getOrElse(Pair(point.first + 1, point.second)) { 0 } +
-                    memoryPartTwo.getOrElse(Pair(point.first, point.second + 1)) { 0 } +
-                    memoryPartTwo.getOrElse(Pair(point.first + 1, point.second + 1)) { 0 } +
-                    memoryPartTwo.getOrElse(Pair(point.first - 1, point.second)) { 0 } +
-                    memoryPartTwo.getOrElse(Pair(point.first, point.second - 1)) { 0 } +
-                    memoryPartTwo.getOrElse(Pair(point.first - 1, point.second - 1)) { 0 } +
-                    memoryPartTwo.getOrElse(Pair(point.first - 1, point.second + 1)) { 0 } +
-                    memoryPartTwo.getOrElse(Pair(point.first + 1, point.second - 1)) { 0 }
+            memoryPartTwo[point] = offsets.sumOf { offset ->
+                memoryPartTwo.getOrElse(Pair(point.first + offset.first, point.second + offset.second)) { 0 }
+            }
             if (memoryPartTwo[point]!! > memoryPartTwoMax) {
                 memoryPartTwoMax = memoryPartTwo[point]!!
             }
