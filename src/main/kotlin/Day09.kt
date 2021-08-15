@@ -7,19 +7,16 @@ fun main() {
     var groupLevel = 0
     var garbageChars = 0
     do {
-        if (input[i] == '!') {
-            input.removeAt(i + 1)
-        } else if (input[i] == '<' && !garbage) {
-            garbage = true
-        } else if(input[i] == '>' && garbage) {
-            garbage = false
-        } else if (input[i] == '{' && !garbage) {
-            groupLevel += 1
-        } else if (input[i] == '}' && !garbage && groupLevel > 0) {
-            totalGroupLevel += groupLevel
-            groupLevel -= 1
-        } else if(garbage) {
-            garbageChars += 1
+        when {
+            input[i] == '!' -> input.removeAt(i + 1)
+            input[i] == '<' && !garbage -> garbage = true
+            input[i] == '>' && garbage -> garbage = false
+            input[i] == '{' && !garbage -> groupLevel += 1
+            input[i] == '}' && !garbage && groupLevel > 0 -> {
+                totalGroupLevel += groupLevel
+                groupLevel -= 1
+            }
+            garbage -> garbageChars += 1
         }
         i += 1
     } while (i < input.size)
