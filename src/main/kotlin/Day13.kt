@@ -1,24 +1,12 @@
 import java.io.File
 
 fun main() {
-    var sum = 0
-    input.keys.forEach { i ->
-        if (i % (2 * input[i]!! - 2) == 0) {
-            sum += i * input[i]!!
-        }
-    }
-    println(sum)
+    println(input.keys.filter { it % (2 * input[it]!! - 2) == 0 }.sumOf { it * input[it]!! })
 
     var delay = 0
     do {
-        var crossed = true
         delay += 1
-        input.keys.forEach { i ->
-            if ((delay + i) % (2 * input[i]!! - 2) == 0) {
-                crossed = false
-            }
-        }
-    } while (!crossed)
+    } while (input.keys.any { (delay + it) % (2 * input[it]!! - 2) == 0 })
     println(delay)
 }
 
