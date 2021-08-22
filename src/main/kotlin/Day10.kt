@@ -1,15 +1,13 @@
 import java.util.*
 
-fun  main() {
-    val list = (0..255)
-    val part1 = knot(list.toMutableList(), ints, 1)
+fun main() {
+    val part1 = knot(ints, 1)
     println("${part1[0] * part1[1]}")
-    val sparse = knot(list.toMutableList(), ascii, 64)
-    val dense = sparse.chunked(16).map { block -> block.reduce{sum, element -> sum.xor(element)}}
-    println(dense.joinToString("") { Integer.toHexString(it).padStart(2, '0') })
+    println(hex(ascii, 64))
 }
 
-fun knot(list: MutableList<Int>, lengths: List<Int>, rounds: Int) : List<Int> {
+fun knot(lengths: List<Int>, rounds: Int): List<Int> {
+    val list = (0..255).toMutableList()
     var skip = 0
     var position = 0
     repeat(rounds) {
@@ -25,7 +23,17 @@ fun knot(list: MutableList<Int>, lengths: List<Int>, rounds: Int) : List<Int> {
     return list
 }
 
+fun dense(lengths: List<Int>, rounds: Int): List<Int> {
+    return knot(lengths, rounds).chunked(16).map { block -> block.reduce { sum, element -> sum.xor(element) } }
+}
+
+fun hex(lengths: List<Int>, rounds: Int): String {
+    return dense(
+        lengths + ("17, 31, 73, 47, 23".split(", ").map { it.toInt() }),
+        rounds
+    ).joinToString("") { Integer.toHexString(it).padStart(2, '0') }
+}
 
 private const val input = "18,1,0,161,255,137,254,252,14,95,165,33,181,168,2,188"
 private val ints = input.split(",").map { it.toInt() }
-private val ascii: List<Int> = input.map { it.code }.toMutableList() + ("17, 31, 73, 47, 23".split(", ").map { it.toInt() })
+private val ascii: List<Int> = input.map { it.code }.toMutableList()
