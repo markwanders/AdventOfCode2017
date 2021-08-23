@@ -1,21 +1,26 @@
 fun main() {
-    var startA = 703L; var startB = 516L; var matches = 0
+    var a = 703L; var b = 516L; var matches = 0
     repeat(40000000) {
-        startA = generatorA(startA)
-        startB = generatorB(startB)
-        if(judge(startA, startB)) matches += 1
+        a = generatorA(a)
+        b = generatorB(b)
+        matches += judge(a, b)
     }
     println(matches)
-    startA = 703; startB = 516; matches = 0
-    val a = mutableListOf<Long>(); val b = mutableListOf<Long>()
-    while (a.size < 5000000 || b.size < 5000000) {
-        startA = generatorA(startA)
-        startB = generatorB(startB)
-        if (startA%4 == 0L) a.add(startA)
-        if (startB%8 == 0L) b.add(startB)
-    }
+    a = 703; b = 516
+    val aIterator = sequence {
+        while(true) {
+            a = generatorA(a)
+            if (a % 4 == 0L) yield(a)
+        }
+    }.iterator()
+    val bIterator = sequence {
+        while(true) {
+            b = generatorB(b)
+            if (b % 8 == 0L) yield(b)
+        }
+    }.iterator()
     println((0..4999999).sumOf {
-        if (judge(a[it], b[it])) 1L else 0L
+        judge(aIterator.next(), bIterator.next())
     })
 }
 
@@ -27,7 +32,7 @@ fun generatorB(n: Long): Long {
     return (n * 48271) % 2147483647
 }
 
-fun judge(a: Long, b: Long): Boolean {
-    return a.toString(2).takeLast(16) == b.toString(2).takeLast(16)
+fun judge(a: Long, b: Long): Int {
+    return if(a.toString(2).takeLast(16) == b.toString(2).takeLast(16))  1 else  0
 
 }
