@@ -1,5 +1,5 @@
-val seen = mutableSetOf<Pair<Int, Int>>()
-val grid = mutableListOf<String>()
+private val seen = mutableSetOf<Pair<Int, Int>>()
+private val grid = mutableListOf<String>()
 
 fun main() {
     println("Answer part 1: " + (0..127).sumOf { rowNumber ->

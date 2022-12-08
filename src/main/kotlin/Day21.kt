@@ -39,7 +39,7 @@ fun main() {
 }
 
 
-fun matchGridToRule(grid: List<List<Char>>) = rules.keys.first { functions.any { function -> gridToRule(function.call(grid)) == it} }
+fun matchGridToRule(grid: List<List<Char>>) = rules.keys.first { functions.any { function -> gridToRule(function.invoke(grid)) == it} }
 
 fun flipHorizontal(grid: List<List<Char>>): List<List<Char>> = grid.map { it.reversed() }
 
