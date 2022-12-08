@@ -9,13 +9,44 @@ fun main() {
     var facing = -1 to 0
     var infected = 0
     repeat(10000) {
-        if(map[position] == '#') {
-            map[position] = '.'
-            facing = turnRight(facing)
-        } else {
-            map[position] = '#'
-            facing = turnLeft(facing)
-            infected++
+        when (map.getValue(position)) {
+            '#' -> {
+                map[position] = '.'
+                facing = turnRight(facing)
+            }
+            '.' -> {
+                map[position] = '#'
+                facing = turnLeft(facing)
+                infected++
+            }
+        }
+        position = position.first + facing.first to position.second + facing.second
+    }
+    println(infected)
+
+    map.clear()
+    input.forEachIndexed { y, s -> s.forEachIndexed { x, c -> map[y to x] = c } }
+    position = input.size/2 to input.size/2
+    facing = -1 to 0
+    infected = 0
+    repeat(10000000) {
+        when (map.getValue(position)) {
+            '#' -> {
+                map[position] = 'f'
+                facing = turnRight(facing)
+            }
+            '.' -> {
+                map[position] = 'w'
+                facing = turnLeft(facing)
+            }
+            'w' -> {
+                map[position] = '#'
+                infected++
+            }
+            'f' -> {
+                map[position] = '.'
+                facing = reverse(facing)
+            }
         }
         position = position.first + facing.first to position.second + facing.second
     }
@@ -53,3 +84,5 @@ fun turnRight(a: Pair<Int, Int>): Pair<Int, Int> {
     }
     return 0 to 0
 }
+
+fun reverse(a: Pair<Int, Int>): Pair<Int, Int> = -a.first to -a.second
